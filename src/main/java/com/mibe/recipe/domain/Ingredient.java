@@ -10,7 +10,7 @@ public class Ingredient {
     private Long id;
     private String description;
     private BigDecimal amount;
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unit;
     @ManyToOne
     private Recipe recipe;
