@@ -126,6 +126,7 @@ public class Recipe {
     }
 
     public void setNote(Note note) {
+        note.setRecipe(this);
         this.note = note;
     }
 

@@ -1,6 +1,7 @@
 package com.mibe.recipe.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ public class Category {
     String description;
 
     @ManyToMany(mappedBy = "categories")
-    Set<Recipe> recipies;
+    Set<Recipe> recipies=new HashSet<>();
 
     public Long getId() {
         return id;
