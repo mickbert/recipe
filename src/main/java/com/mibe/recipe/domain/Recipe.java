@@ -145,4 +145,8 @@ public class Recipe {
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
 }
