@@ -7,5 +7,34 @@
 <body>
 <img src="images/head-banner.jpeg">
 <h1 th:text="#{my_recipe_list}">My recipe list</h1>
+
+<div th:each="recipe : ${recipeList}">
+    <h2 th:text="${recipe.description}">Recipe description</h2>
+    <table><tr>
+        <td><b>Preparation time:</b></td>
+        <td th:text="${recipe.prepTimeMin}">total prepatarion time</td>
+    </tr><tr>
+        <td><b>Cooking time:</b></td>
+        <td th:text="${recipe.cookTimeMin}">coocking time</td>
+    </tr><tr>
+        <td><b>Servings:</b></td>
+        <td th:text="${recipe.servingCount}">number of servings</td>
+    </tr><tr>
+        <td><b>Source:</b></td>
+        <td><a th:href="${recipe.url}" th:text="${recipe.source}">source</a></td>
+    </tr><tr>
+        <td><b>Difficulty:</b></td>
+        <td th:text="${recipe.difficulty}">difficulty</td>
+    </tr></table>
+    <h3>Ingredients</h3>
+    <ul>
+        <li th:each="ingredient : ${recipe.ingredients}">
+            <span th:text="${ingredient.description}">ingredient</span>
+            <span th:text="${ingredient.amount}">amount</span>
+            <span th:text="${ingredient.unit.code}">unit</span>
+        </li>
+    </ul>
+    <p th:text="${recipe.directions}">Preparation direction</p>
+</div>
 </body>
 </html>

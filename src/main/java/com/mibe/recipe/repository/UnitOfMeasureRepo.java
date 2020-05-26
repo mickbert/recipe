@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UnitOfMeasureRepository extends CrudRepository<Long, UnitOfMeasure> {
+public interface UnitOfMeasureRepo extends CrudRepository<UnitOfMeasure, Long> {
     Optional<UnitOfMeasure> findByCode(String aCode);
 }

@@ -2,6 +2,7 @@ package com.mibe.recipe.domain;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,10 +17,11 @@ public class Recipe {
     private Integer servingCount;
     private String source;
     private String url;
+    @Lob
     private String directions;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    Set<Ingredient> ingredients;
+    Set<Ingredient> ingredients=new HashSet<>();
 
     @Lob
     private byte image[];
@@ -130,5 +132,11 @@ public class Recipe {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public Recipe addIngredient(Ingredient aIngredient) {
+        aIngredient.setRecipe(this);
+        ingredients.add(aIngredient);
+        return this;
     }
 }
