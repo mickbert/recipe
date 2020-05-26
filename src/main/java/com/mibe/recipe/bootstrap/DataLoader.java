@@ -14,7 +14,13 @@ public class DataLoader implements CommandLineRunner {
     CategoryRepo categoryRepo;
     UnitOfMeasureRepo unitOfMeasureRepo;
 
+    UnitOfMeasure countUnit;
+    UnitOfMeasure gramsUnit;
+    UnitOfMeasure pinchUnit;
+    UnitOfMeasure deciliterUnit;
 
+    Category americanCategory;
+    Category mexicanCategory;
 
     public DataLoader(RecipeRepo recipeRepo, CategoryRepo categoryRepo, UnitOfMeasureRepo unitOfMeasureRepo) {
         this.recipeRepo = recipeRepo;
@@ -28,11 +34,21 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadRecipeIntoDatabase() {
-        UnitOfMeasure countUnit = findUnitOfMeasure("#");
-        UnitOfMeasure gramsUnit = findUnitOfMeasure("g");
-        UnitOfMeasure pinchUnit = findUnitOfMeasure("pc");
-        UnitOfMeasure deciliterUnit = findUnitOfMeasure("dl");
+        countUnit = findUnitOfMeasure("#"); 
+        gramsUnit = findUnitOfMeasure("g"); 
+        pinchUnit = findUnitOfMeasure("pc");
+        deciliterUnit = findUnitOfMeasure("dl");
 
+        americanCategory = findCategory("American");
+        mexicanCategory = findCategory("Mexican");
+
+        Recipe recipe = fillGuacamoleRecipe();
+        recipeRepo.save(recipe);
+        recipe = fillChickenTacoRecipe();
+        recipeRepo.save(recipe);
+    }
+
+    private Recipe fillGuacamoleRecipe() {
         Recipe recipe = new Recipe();
         recipe.setDescription("Perfect Guacamole");
         recipe.setPrepTimeMin(10);
@@ -45,7 +61,7 @@ public class DataLoader implements CommandLineRunner {
                                 "upgrade.");
         recipe.setSource("Simply recipes");
         recipe.setDifficulty(Difficulty.EASY);
-
+        recipe.addCategory(mexicanCategory);
         Ingredient ingredient = new Ingredient();
         ingredient.setDescription("Avocado");
         ingredient.setAmount(new BigDecimal(1));
@@ -88,9 +104,12 @@ public class DataLoader implements CommandLineRunner {
         ingredient.setUnit(gramsUnit);
         recipe.addIngredient(ingredient);
 
-        Recipe guacamole = recipeRepo.save(recipe);
+        return recipe;
+    }
 
-        recipe = new Recipe();
+    private Recipe fillChickenTacoRecipe(){
+        Recipe recipe = new Recipe();
+
         recipe.setDescription("Spicy Grilled Chicken Tacos");
         recipe.setPrepTimeMin(30);
         recipe.setCookTimeMin(3);
@@ -103,8 +122,10 @@ public class DataLoader implements CommandLineRunner {
                               "toppings, Grill the chicken, then let it rest while you warm the " +
                              "tortillas, Now you are ready to assemble the tacos and dig in");
         recipe.setDifficulty(Difficulty.EASY);
+        recipe.addCategory(americanCategory);
+        recipe.addCategory(mexicanCategory);
 
-        ingredient = new Ingredient();
+        Ingredient ingredient = new Ingredient();
         ingredient.setDescription("chiccken chips");
         ingredient.setAmount(new BigDecimal(500));
         ingredient.setUnit(gramsUnit);
@@ -152,16 +173,28 @@ public class DataLoader implements CommandLineRunner {
         ingredient.setUnit(countUnit);
         recipe.addIngredient(ingredient);
 
-        Recipe chicken = recipeRepo.save(recipe);
+        return recipe;
     }
 
     private UnitOfMeasure findUnitOfMeasure(String aCode) {
         return unitOfMeasureRepo.findByCode(aCode)
             .orElseGet(()->{
-                    UnitOfMeasure unit = new UnitOfMeasure();
-                    unit.setCode("unknown");
-                    unit.setName("unknown unit of measure code " + aCode);
-                    return unit;
+                    UnitOfMeasure none = new UnitOfMeasure();
+                    none.setCode("unknown");
+                    none.setName("unknown unit of measure code " + aCode);
+                    System.err.println(none.getName());
+                    return none;
+                });
+    }
+
+    private Category findCategory(String aCategoryName) {
+        return categoryRepo.findByName(aCategoryName)
+                .orElseGet(() -> {
+                    Category none = new Category();
+                    none.setName("unknown");
+                    none.setDescription("unknown category name " + aCategoryName);
+                    System.err.println(none.getDescription());
+                    return none;
                 });
     }
 }

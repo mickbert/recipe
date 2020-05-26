@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface CategoryRepo extends CrudRepository<Category, Long> {
-    Optional<Category> findByDescription(String aDesc);
+    Optional<Category> findByName(String aDesc);
 }

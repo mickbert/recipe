@@ -36,7 +36,18 @@ public class Recipe {
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
+
+    public Recipe addIngredient(Ingredient aIngredient) {
+        aIngredient.setRecipe(this);
+        ingredients.add(aIngredient);
+        return this;
+    }
+
+    public Recipe addCategory(Category aCategory){
+        categories.add(aCategory);
+        return this;
+    }
 
     public Long getId() {
         return id;
@@ -132,11 +143,5 @@ public class Recipe {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-    }
-
-    public Recipe addIngredient(Ingredient aIngredient) {
-        aIngredient.setRecipe(this);
-        ingredients.add(aIngredient);
-        return this;
     }
 }
